@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Centro Escolar Amatepec</title>
+
+  <style>
+    :root{
+      --color-bg: #ffffff;
+      --color-text: #111827;
+      --color-brand: #0F172A;
+      --color-active: #FFD60A;  /* amarillo activo */
+      --color-muted: #6B7280;
+      --container: 1100px;
+      --radius: 14px;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+    body{
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--color-text);
+      background: var(--color-bg);
+      line-height: 1.6;
+    }
+    img{ max-width: 100%; height: auto; display: block; }
+    a{ color: inherit; text-decoration: none; }
+
+    .container{ max-width: var(--container); margin: 0 auto; padding: 0 16px; }
+
+    header{
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255,255,255,.85);
+      backdrop-filter: saturate(160%) blur(6px);
+      border-bottom: 1px solid #eee;
+    }
+    .nav{
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .75rem 0;
+    }
+    .brand{ font-weight: 800; letter-spacing: .2px; color: var(--color-brand); }
+    .brand small{ display:block; font-weight: 600; color: var(--color-muted); }
+
+    .menu{ display: flex; gap: .5rem; flex-wrap: wrap; }
+
+    .tab{
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: .6rem 1rem; border-radius: 999px;
+      border: 2px solid #e5e7eb; background: #fff;
+      font-weight: 600; transition: background .15s, border-color .15s, transform .06s;
+    }
+    .tab:hover{ transform: translateY(-1px); }
+    .tab[aria-current="page"]{
+      background: var(--color-active);
+      border-color: var(--color-active);
+    }
+
+    section{ padding: clamp(1.5rem, 4vw, 3rem) 0; }
+    section .card{
+      background: #fff; border: 1px solid #eee; border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: clamp(1rem, 2.5vw, 2rem);
+    }
+    h1, h2{ line-height: 1.2; margin: 0 0 .6rem; }
+    h1{ font-size: clamp(1.8rem, 4.5vw, 2.6rem); color: var(--color-brand); }
+    h2{ font-size: clamp(1.4rem, 3.5vw, 2rem); color: var(--color-brand); }
+    .lead{ font-size: clamp(1rem, 2.4vw, 1.125rem); color: var(--color-muted); }
+
+    .grid{ display: grid; gap: 1rem; grid-template-columns: 1fr; }
+    @media (min-width: 700px){ .grid{ grid-template-columns: repeat(3, 1fr); } }
+
+    footer{
+      border-top: 1px solid #eee; padding: 1.25rem 0; color: var(--color-muted);
+      text-align: center; font-size: .95rem;
+    }
+
+    /* ====== Galería (hover + lightbox) ====== */
+    .gallery figure{
+      position: relative; isolation: isolate; overflow: hidden;
+      transition: transform .2s ease; aspect-ratio: 4/3; cursor: zoom-in;
+      border: 1px solid #eee; border-radius: 12px; box-shadow: var(--shadow);
+      background:#fff;
+    }
+    .gallery img{
+      width: 100%; height: 100%; object-fit: cover; display:block;
+      transition: transform .35s ease, filter .35s ease;
+    }
+    .gallery figure:hover img{ transform: scale(1.06); filter: saturate(105%); }
+
+    #lightbox{
+      position: fixed; inset: 0; z-index: 1000; display: none;
+      background: rgba(0,0,0,.75); align-items: center; justify-content: center; padding: 2rem;
+    }
+    #lightbox[aria-hidden="false"]{ display: flex; }
+    #lightbox .frame{
+      position: relative; max-width: min(1100px, 96vw); max-height: 86vh;
+      background: #000; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    }
+    #lightbox img{ display:block; max-width:100%; max-height:86vh; object-fit: contain; background:#000; }
+
+    .lb-btn{
+      position: absolute; top: .5rem; width: 42px; height: 42px;
+      border: none; border-radius: 999px; background: rgba(255,255,255,.9);
+      display: grid; place-items: center; cursor: pointer;
+      font: inherit; font-weight: 700; color:#111; box-shadow: 0 2px 10px rgba(0,0,0,.2);
+    }
+    #lb-close{ right: .5rem; }
+    #lb-prev{ left: .5rem; top: 50%; transform: translateY(-50%); }
+    #lb-next{ right: .5rem; top: 50%; transform: translateY(-50%); }
+
+    #lb-caption{
+      position: absolute; left:0; right:0; bottom:0; color:#fff;
+      background: linear-gradient(180deg, transparent, rgba(0,0,0,.6));
+      padding: .75rem 1rem; font-size: .95rem;
+    }
+
+    /* ====== Sobre nosotros: columnas ====== */
+    .row{
+      display: grid; grid-template-columns: 1fr 100px; gap: 1rem;
+      align-items: start; margin-bottom: 1.5rem;
+    }
+    .row h3{ margin-top: 0; color: var(--color-brand); }
+    .col-text p{ text-align: justify; }
+    .col-icon img{ max-width: 100%; height: auto; display: block; }
+    @media(max-width:700px){
+      .row{ grid-template-columns: 1fr; }
+      .col-icon{ text-align: center; margin-top: .75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="container nav" aria-label="navegación principal">
+      <div class="brand">
+        <img src="assets/logo.png" alt="Logo del Centro Escolar Amatepec"
+             style="height:60px; width:auto; vertical-align:middle; margin-right:10px; display:inline-block;">
+        CENTRO ESCOLAR AMATEPEC
+        <small>Educación pública de calidad</small>
+      </div>
+
+      <div class="menu" role="menubar" aria-label="Secciones del sitio">
+        <a class="tab" role="menuitem" href="#inicio"          data-target="inicio"          aria-current="page">Inicio</a>
+        <a class="tab" role="menuitem" href="#sobre-nosotros"  data-target="sobre-nosotros">Sobre Nosotros</a>
+        <a class="tab" role="menuitem" href="#galeria"         data-target="galeria">Galería de Fotos</a>
+        <a class="tab" role="menuitem" href="#oferta"          data-target="oferta">Oferta Académica</a>
+        <a class="tab" role="menuitem" href="#ubicacion"       data-target="ubicacion">Ubicación del Centro</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- INICIO -->
+    <section id="inicio" class="container">
+      <div class="card">
+        <h1>CENTRO ESCOLAR AMATEPEC</h1>
+<p>Esta página web es un esfuerzo de un proyecto ejecutado por los alumnos Carlos Umanzor y Paola Cruz de la Promoción de Noveno Grado 2025 en conjunto con el docente de informática</p>        
+<p class="lead">
+          El Centro Escolar Amatepec es una institución pública comprometida con la formación integral de niños, niñas y adolescentes de nuestra comunidad. Como parte del sistema educativo de El Salvador, trabajamos para garantizar una educación inclusiva, equitativa y de calidad, fomentando valores, conocimientos y habilidades que preparen a nuestros estudiantes para enfrentar los retos de la vida con responsabilidad y solidaridad.
+        </p>
+        <img src="assets/portada1.jpg" alt="Segundo grado 2024" />
+        <p class="lead">
+          Nos distinguimos por ser un espacio seguro y abierto al aprendizaje...
+        </p>
+        <img src="assets/portada2.jpg" alt="Parvularia en hora de Lectura" />
+      </div>
+    </section>
+
+    <!-- SOBRE NOSOTROS -->
+    <section id="sobre-nosotros" class="container" hidden>
+      <div class="card">
+        <h2>Sobre nosotros</h2>
+
+        <div class="row">
+          <div class="col-text">
+            <h3>Misión</h3>
+            <p>Brindar una educación pública de calidad que promueva el desarrollo integral de sus estudiantes: académica, ética, cultural, física y socialmente. Nos comprometemos a formar ciudadanos responsables, respetuosos y críticos, capaces de aprender a aprender, adaptarse al cambio y contribuir al bien común. A través de un ambiente de convivencia respetuosa, colaboración docente-familia-comunidad, y el uso de metodologías activas, fomentamos valores que impulsen la solidaridad, la equidad y el respeto a la diversidad.</p>
+          </div>
+          <div class="col-icon">
+            <img src="assets/mision.png" alt="Ícono de Misión">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-text">
+            <h3>Visión</h3>
+            <p>Ser reconocidos como un centro educativo referente en la zona, en El Salvador, por su excelencia académica, su compromiso social y su capacidad para formar ciudadanos íntegros. Aspiramos a que los egresados del Centro Escolar Amatepec sean líderes éticos, pensadores creativos y agentes de cambio capaces de enfrentar los desafíos del siglo XXI, contribuyendo a una sociedad inclusiva, democrática y con crecimiento sostenible.</p>
+          </div>
+          <div class="col-icon">
+            <img src="assets/vision.png" alt="Ícono de Visión">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-text">
+            <h3>Valores</h3>
+            <ul>
+              <li><strong>Responsabilidad:</strong> Cumplir con los compromisos personales, académicos y sociales, actuando con honestidad y coherencia.</li>
+              <li><strong>Solidaridad:</strong> Apoyar a quien lo necesite, promoviendo la ayuda mutua, el compañerismo y el sentido de comunidad.</li>
+              <li><strong>Creatividad:</strong> Fomentar el pensamiento innovador, la curiosidad y la capacidad de proponer soluciones nuevas.</li>
+              <li><strong>Participación:</strong> Involucrar activamente a estudiantes, docentes, familias y comunidad en el proceso educativo y en la toma de decisiones.</li>
+            </ul>
+          </div>
+          <div class="col-icon">
+            <img src="assets/valores.png" alt="Ícono de Valores">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALERÍA -->
+    <section id="galeria" class="container" hidden>
+      <div class="card">
+        <h2>Galería de Fotos • Actividades de Primera Infancia</h2>
+        <div class="grid gallery" style="margin-top:.75rem;">
+          <figure data-caption="Estudiantes en actividades escolares">
+            <img src="assets/parvularia1.jpg" alt="Estudiantes en actividades escolares">
+          </figure>
+          <figure data-caption="Aula del Centro Escolar Amatepec">
+            <img src="assets/parvularia2.jpg" alt="Aula del Centro Escolar Amatepec">
+          </figure>
+          <figure data-caption="Ceremonia de graduación">
+            <img src="assets/parvularia3.jpg" alt="Ceremonia de graduación">
+          </figure>
+          <figure data-caption="Laboratorio de ciencias">
+            <img src="assets/parvularia4.jpg" alt="Laboratorio de ciencias">
+          </figure>
+          <figure data-caption="Evento deportivo">
+            <img src="assets/parvularia5.jpg" alt="Evento deportivo">
+          </figure>
+          <figure data-caption="Biblioteca del centro">
+            <img src="assets/parvularia6.jpg" alt="Biblioteca del centro">
+          </figure>
+        </div>
+
+        <hr>
+
+        <h2>Galería de Fotos • Proyectos</h2>
+	<h3>Cachiporras y Porras<h3>
+        <div class="grid gallery" style="margin-top:.75rem;">
+          <figure data-caption="Cachiporras y Porras">
+            <img src="assets/cachiporra1.jpg" alt="Cachiporras CEA">
+          </figure>
+          <!-- Agrega más <figure> según tus fotos -->
+ 	<figure data-caption="Cachiporras y Porras">
+            <img src="assets/cachiporra2.jpg" alt="Cachiporras CEA">
+          </figure>
+ <figure data-caption="Cachiporras y Porras">
+            <img src="assets/cachiporra3.jpg" alt="Cachiporras CEA">
+          </figure>
+ <figure data-caption="Cachiporras y Porras">
+            <img src="assets/cachiporra4.jpg" alt="Cachiporras CEA">
+          </figure>
+ <figure data-caption="Cachiporras y Porras">
+            <img src="assets/cachiporra5.jpg" alt="Cachiporras CEA">
+          </figure>
+ <figure data-caption="Cachiporras y Porras">
+            <img src="assets/cachiporra6.jpg" alt="Cachiporras CEA">
+          </figure>
+        </div>
+
+	<hr>
+
+<h3>Banda de Paz<h3>
+        <div class="grid gallery" style="margin-top:.75rem;">
+          <figure data-caption="Banda de Paz">
+            <img src="assets/banda1.jpg" alt="Banda CEA">
+          </figure>
+          <figure data-caption="Banda de Paz">
+            <img src="assets/banda2.jpg" alt="Banda CEA">
+          </figure>
+<figure data-caption="Banda de Paz">
+            <img src="assets/banda3.jpg" alt="Banda CEA">
+          </figure>
+<figure data-caption="Banda de Paz">
+            <img src="assets/banda4.jpg" alt="Banda CEA">
+          </figure>
+<figure data-caption="Banda de Paz">
+            <img src="assets/banda5.jpg" alt="Banda CEA">
+          </figure>
+<figure data-caption="Banda de Paz">
+            <img src="assets/banda6.jpg" alt="Banda CEA">
+          </figure>
+<figure data-caption="Banda de Paz">
+            <img src="assets/banda7.jpg" alt="Banda CEA">
+          </figure>
+        </div>
+
+	<hr>
+
+<h3>Talleres de Robótica<h3>
+        <div class="grid gallery" style="margin-top:.75rem;">
+          <figure data-caption="Taller de Robótica">
+            <img src="assets/robo1.jpg" alt="Taller de Robotica CEA">
+          </figure>
+<figure data-caption="Taller de Robótica">
+            <img src="assets/robo2.jpg" alt="Taller de Robotica CEA">
+          </figure>
+<figure data-caption="Taller de Robótica">
+            <img src="assets/robo3.jpg" alt="Taller de Robotica CEA">
+          </figure>
+<figure data-caption="Taller de Robótica">
+            <img src="assets/robo4.jpg" alt="Taller de Robotica CEA">
+          </figure>
+<figure data-caption="Taller de Robótica">
+            <img src="assets/robo5.jpg" alt="Taller de Robotica CEA">
+          </figure>
+<figure data-caption="Taller de Robótica">
+            <img src="assets/robo6.jpg" alt="Taller de Robotica CEA">
+          </figure>
+ 	</div>
+
+	<hr>
+
+<h2>Galería de Fotos • Salidas Recreativas y Educativas</h2>
+        <div class="grid gallery" style="margin-top:.75rem;">
+          <figure data-caption="Salidas CEA">
+            <img src="assets/salida1.jpg" alt="salidas CEA">
+          </figure>
+<figure data-caption="Salidas CEA">
+            <img src="assets/salida2.jpg" alt="salidas CEA">
+          </figure>
+<figure data-caption="Salidas CEA">
+            <img src="assets/salida3.jpg" alt="salidas CEA">
+          </figure>
+<figure data-caption="Salidas CEA">
+            <img src="assets/salida4.jpg" alt="salidas CEA">
+          </figure>
+<figure data-caption="Salidas CEA">
+            <img src="assets/salida5.jpg" alt="salidas CEA">
+          </figure>
+<figure data-caption="Salidas CEA">
+            <img src="assets/salida6.jpg" alt="salidas CEA">
+          </figure>
+<figure data-caption="Salidas CEA">
+            <img src="assets/salida7.jpg" alt="salidas CEA">
+          </figure>
+<figure data-caption="Salidas CEA">
+            <img src="assets/salida8.jpg" alt="salidas CEA">
+          </figure>
+<figure data-caption="Salidas CEA">
+            <img src="assets/salida9.jpg" alt="salidas CEA">
+          </figure>
+ 	</div>
+
+
+
+        <!-- LIGHTBOX (necesario para el visor) -->
+        <div id="lightbox" aria-hidden="true" role="dialog" aria-label="Visor de imágenes">
+          <div class="frame">
+            <button id="lb-prev" class="lb-btn" aria-label="Anterior">‹</button>
+            <button id="lb-next" class="lb-btn" aria-label="Siguiente">›</button>
+            <button id="lb-close" class="lb-btn" aria-label="Cerrar">✕</button>
+            <img id="lb-img" src="" alt="">
+            <div id="lb-caption"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OFERTA -->
+    <section id="oferta" class="container" hidden>
+      <div class="card">
+        <h2>Oferta Académica</h2>
+        <ul>
+          <li><strong>Primera Infancia:</strong> Parvularia 4 años, 5 años, 6 años y Primer Grado.</li>
+	  <p>Ofrecemos una educación de calidad para los más pequeños, dejando una enseñanza de valores y condiciones que servirán para un mejor desarrollo en estas edades.</p>
+          <li><strong>Educación Básica:</strong> de 2.º a 9.º grado.</li>
+	  <p>Educación de calidad, con docentes especializados en cada una de las áreas de la educación básica que los alumnos necesitan para desarrollar mejores habilidades</p>
+          <li><strong>Bachillerato:</strong> Contador (Opción Administrativo Contable).</li>
+	<p>El bachillerato administrativo contable es un programa de educación secundaria que forma técnicos con habilidades para gestionar y controlar la información financiera y económica de empresas. Los estudiantes aprenden sobre contabilidad, auditoría, finanzas, y aplicación de normativas comerciales y tributarias, preparándolos para trabajar en diversos sectores o continuar sus estudios superiores.</p>
+        </ul>
+      </div>
+    </section>
+
+    <!-- UBICACIÓN -->
+    <section id="ubicacion" class="container" hidden>
+      <div class="card">
+        <h2>Ubicación del Centro</h2>
+        <p>Final Calle Los Cedros y Av. Los Abetos, Col. Amatepec, Soyapango.</p>
+        <div style="border:1px solid #eee; border-radius: 12px; overflow:hidden">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d755.8411018136339!2d-89.1700107!3d13.6962053!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f633733c7aaaaad%3A0x797dee3e8095131f!2sCentro%20Escolar%20%22Amatepec%22!5e1!3m2!1ses!2ssv!4v1760737552442!5m2!1ses!2ssv" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+        <p style="margin-top:.75rem">Tel.: 2293-0274</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Centro Escolar Amatepec. Todos los derechos reservados.
+  </footer>
+
+  <script>
+    // Tabs y secciones
+    const tabs = document.querySelectorAll('.tab');
+    const sections = document.querySelectorAll('main > section');
+
+    function showSection(targetId){
+      sections.forEach(sec => { sec.hidden = sec.id !== targetId; });
+      tabs.forEach(tab => {
+        const isActive = tab.dataset.target === targetId;
+        tab.setAttribute('aria-current', isActive ? 'page' : 'false');
+      });
+      if(location.hash !== '#'+targetId){ history.pushState(null, '', '#'+targetId); }
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', (e) => { e.preventDefault(); showSection(tab.dataset.target); });
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const initial = (location.hash || '#inicio').replace('#','');
+      showSection(initial);
+      document.getElementById('year').textContent = new Date().getFullYear();
+    });
+
+    window.addEventListener('popstate', () => {
+      const current = (location.hash || '#inicio').replace('#','');
+      showSection(current);
+    });
+
+    // Lightbox
+    (function(){
+      const figures = Array.from(document.querySelectorAll('.gallery figure'));
+      const modal = document.getElementById('lightbox');
+      const img   = document.getElementById('lb-img');
+      const cap   = document.getElementById('lb-caption');
+      const btnPrev = document.getElementById('lb-prev');
+      const btnNext = document.getElementById('lb-next');
+      const btnClose= document.getElementById('lb-close');
+
+      if(!modal) return; // seguridad
+
+      let index = 0;
+
+      function openAt(i){
+        index = (i + figures.length) % figures.length;
+        const f = figures[index];
+        const el = f.querySelector('img');
+        img.src = el.src;
+        img.alt = el.alt || '';
+        cap.textContent = f.dataset.caption || el.alt || '';
+        modal.setAttribute('aria-hidden','false');
+        document.body.style.overflow = 'hidden';
+      }
+      function close(){
+        modal.setAttribute('aria-hidden','true');
+        img.src = '';
+        document.body.style.overflow = '';
+      }
+      function next(){ openAt(index+1); }
+      function prev(){ openAt(index-1); }
+
+      figures.forEach((f,i)=>{
+        f.addEventListener('click', ()=> openAt(i));
+        f.tabIndex = 0;
+        f.addEventListener('keypress', (e)=>{ if(e.key==='Enter') openAt(i); });
+      });
+
+      btnClose.addEventListener('click', close);
+      btnNext.addEventListener('click', next);
+      btnPrev.addEventListener('click', prev);
+
+      modal.addEventListener('click', (e)=> { if(e.target === modal) close(); });
+
+      window.addEventListener('keydown', (e)=>{
+        if(modal.getAttribute('aria-hidden') === 'true') return;
+        if(e.key === 'Escape') close();
+        if(e.key === 'ArrowRight') next();
+        if(e.key === 'ArrowLeft') prev();
+      });
+    })();
+  </script>
+</body>
+</html>
